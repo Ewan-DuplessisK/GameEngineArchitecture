@@ -29,10 +29,12 @@ namespace engine
 
 			const sf::Transform &getTransform() const;
 
-			ManagerContext& getContext(){return context;}
-			void addComponent(Component pComp);
+			ManagerContext& getContext() const{return context;}
+			//void addComponent(Component pComp);
 			template <typename Component>Component &addComponent();
 			template <typename Component>Component *getComponent() const;
+
+		protected:
 
 		private:
 			sf::Vector2f _position{};
@@ -41,8 +43,10 @@ namespace engine
 
 			void updateTransform();
 
+			
 			ManagerContext& context;
 			std::set<std::unique_ptr<Component>> components;
 		};
+		
 	}
 }

@@ -37,5 +37,33 @@ namespace engine
 			_transform.translate(_position);
 			_transform.rotate(_rotation);
 		}
+
+		template <typename Component>
+		Component& Entity::addComponent(){
+			if(!getComponent<Component>()){
+				Component component{new Component(*this)};
+				components.insert(std::unique_ptr<Component>(component));
+				return *component;
+			}
+		}
+
+		template <typename Component>
+		Component* Entity::getComponent() const{
+			auto it = std::find_if(
+				std::begin(components),
+				std::end(components),
+				[](const std::unique_ptr<Component>(&component))
+			{
+				return dynamic_cast<Component *>(component.get()) != nullptr;
+			});
+
+			if (it != std::end(components))
+			{
+				return reinterpret_cast<Component *>(it->get());
+			}
+
+			return nullptr;
+		}
+
 	}
 }
