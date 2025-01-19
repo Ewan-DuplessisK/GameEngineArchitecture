@@ -1,0 +1,48 @@
+#pragma once
+
+#include <memory>
+#include <set>
+#include <SFML/Graphics/Transform.hpp>
+#include "Component.h"
+
+namespace engine
+{
+	namespace gameplay
+	{
+		struct ManagerContext;
+		
+		class Entity
+		{
+		public:
+			Entity(ManagerContext& pContext);
+			
+			virtual ~Entity() = default;
+
+			virtual void update() = 0;
+			virtual void draw() = 0;
+
+			const sf::Vector2f &getPosition() const;
+			void setPosition(const sf::Vector2f &newPosition);
+
+			float getRotation() const;
+			void setRotation(float newRotation);
+
+			const sf::Transform &getTransform() const;
+
+			ManagerContext& getContext(){return context;}
+			void addComponent(Component pComp);
+			template <typename Component>Component &addComponent();
+			template <typename Component>Component *getComponent() const;
+
+		private:
+			sf::Vector2f _position{};
+			float _rotation{ 0.f };
+			sf::Transform _transform;
+
+			void updateTransform();
+
+			ManagerContext& context;
+			std::set<std::unique_ptr<Component>> components;
+		};
+	}
+}
