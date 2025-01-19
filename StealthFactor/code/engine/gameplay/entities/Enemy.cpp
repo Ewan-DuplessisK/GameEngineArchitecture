@@ -6,19 +6,24 @@
 //#include <engine/gameplay/GameplayManager.hpp>
 #include <engine/gameplay/entities/Player.hpp>
 
+#include "engine/gameplay/components/CollisionComponent.h"
+
 namespace engine
 {
 	namespace gameplay
 	{
 		namespace entities
 		{
-			Enemy::Enemy(const std::string &archetypeName)
+			Enemy::Enemy(Entity& entity,const std::string &archetypeName):Character(entity)
 			{
+				collision_component_ = new CollisionComponent(entity,"",0.9f, 0.9f, 1.f);
 				loadArchetype(archetypeName);
 			}
 
 			void Enemy::update()
 			{
+				Character::update();
+				
 				auto &player = gameplay::Manager::getInstance().getPlayer();
 				if (player.hasJustMoved())
 				{
@@ -60,7 +65,7 @@ namespace engine
 					auto xmlArchetype = doc.first_child();
 
 					std::string shapeListName = xmlArchetype.child_value("shapelist");
-					assert(shapeList.load(shapeListName));
+					assert(collision_component_->shapeList.load(shapeListName));
 
 					visionRadius = std::stof(xmlArchetype.child_value("vision_radius"));
 					assert(visionRadius > 0.f);

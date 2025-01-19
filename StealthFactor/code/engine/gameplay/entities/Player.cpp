@@ -9,25 +9,21 @@
 #include <engine/physics/PhysicsManager.hpp>
 #include <engine/Engine.hpp>
 
+#include "engine/gameplay/components/CollisionComponent.h"
+
 namespace engine
 {
 	namespace gameplay
 	{
 		namespace entities
 		{
-			Player::Player()
+			Player::Player(Entity& entity):Character(entity)
 			{
-				shapeList.load("player");
-
-				collisionGeomId = dCreateBox(physics::Manager::getInstance().getSpaceId(), CellSize * 0.9f, CellSize * 0.9f, 1.f);
-				dGeomSetData(collisionGeomId, this);
+				collision_component_ = new CollisionComponent(entity,"player",CellSize * 0.9f, CellSize * 0.9f, 1.f);
 			}
 
-			Player::Player(float pCellSize):CellSize(pCellSize){
-				shapeList.load("player");
-
-				collisionGeomId = dCreateBox(physics::Manager::getInstance().getSpaceId(), CellSize * 0.9f, CellSize * 0.9f, 1.f);
-				dGeomSetData(collisionGeomId, this);
+			Player::Player(Entity& entity,float pCellSize):CellSize(pCellSize),Character(entity){
+				collision_component_ = new CollisionComponent(entity,"player",CellSize * 0.9f, CellSize * 0.9f, 1.f);
 			}
 
 			void Player::update()
@@ -36,28 +32,28 @@ namespace engine
 				auto position = getPosition();
 				float rotation = getRotation();
 
-				if (input::Manager::getInstance().isKeyJustPressed(sf::Keyboard::Left))
+				if (getContext().inputManager.isKeyJustPressed(sf::Keyboard::Left))
 				{
 					justMoved = true;
 					position.x -= CellSize;
 					rotation = 180.f;
 				}
 
-				if (input::Manager::getInstance().isKeyJustPressed(sf::Keyboard::Right))
+				if (getContext().inputManager.isKeyJustPressed(sf::Keyboard::Right))
 				{
 					justMoved = true;
 					position.x += CellSize;
 					rotation = 0.f;
 				}
 
-				if (input::Manager::getInstance().isKeyJustPressed(sf::Keyboard::Up))
+				if (getContext().inputManager.isKeyJustPressed(sf::Keyboard::Up))
 				{
 					justMoved = true;
 					position.y -= CellSize;
 					rotation = -90.f;
 				}
 
-				if (input::Manager::getInstance().isKeyJustPressed(sf::Keyboard::Down))
+				if (getContext().inputManager.isKeyJustPressed(sf::Keyboard::Down))
 				{
 					justMoved = true;
 					position.y += CellSize;
@@ -69,10 +65,10 @@ namespace engine
 					setPosition(position);
 					setRotation(rotation);
 
-					dGeomSetPosition(collisionGeomId, position.x, position.y, 0);
+					Character::update();
 				}
 
-				auto collisions = physics::Manager::getInstance().getCollisionsWith(collisionGeomId);
+				auto collisions = getContext().physicsManager.getCollisionsWith(collision_component_->collisionGeomId);
 				for (auto &geomId : collisions)
 				{
 					auto entity = reinterpret_cast<Entity *>(dGeomGetData(geomId));

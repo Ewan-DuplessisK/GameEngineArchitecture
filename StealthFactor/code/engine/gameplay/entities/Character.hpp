@@ -8,19 +8,21 @@ namespace engine
 {
 	namespace gameplay
 	{
+		class CollisionComponent;
 		namespace entities
 		{
 			class Character : public Entity
 			{
 			public:
-				Character();
+				Character(Entity& entity);
 				virtual ~Character();
+
+				virtual void update() override;
 
 				virtual void draw() override;
 
 			protected:
-				graphics::ShapeList shapeList;
-				dGeomID collisionGeomId;
+				CollisionComponent* collision_component_ = nullptr;
 
 				bool isWalking{ false };
 			};

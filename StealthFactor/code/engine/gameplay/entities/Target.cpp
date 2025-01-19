@@ -1,8 +1,9 @@
 #include "Target.hpp"
 
 //#include <engine/gameplay/GameplayManager.hpp>
-#include <engine/graphics/GraphicsManager.hpp>
-#include <engine/physics/PhysicsManager.hpp>
+
+#include "engine/gameplay/ManagerContext.h"
+#include "engine/gameplay/components/CollisionComponent.h"
 
 namespace engine
 {
@@ -10,23 +11,19 @@ namespace engine
 	{
 		namespace entities
 		{
-			Target::Target()
-			{
-				shapeList.load("target");
-
-				collisionGeomId = dCreateBox(physics::Manager::getInstance().getSpaceId(), gameplay::Manager::CELL_SIZE * 0.9f, gameplay::Manager::CELL_SIZE * 0.9f, 1.f);
-				dGeomSetData(collisionGeomId, this);
+			Target::Target(ManagerContext& pContext):Entity(pContext){
+				collision_component_ = new CollisionComponent(*this,"target",context.graphicsManager::CELL_SIZE * 0.9f, gameplay::Manager::CELL_SIZE * 0.9f, 1.f);
 			}
 
 			Target::~Target()
 			{
-				dGeomDestroy(collisionGeomId);
+				collision_component_.~CollisionComponent();
 			}
 
 			void Target::update()
 			{
 				auto &position = getPosition();
-				dGeomSetPosition(collisionGeomId, position.x, position.y, 0);
+				collision_component_->update(position.x, position.y, 0);
 			}
 
 			void Target::draw()

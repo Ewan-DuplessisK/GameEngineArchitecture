@@ -10,6 +10,8 @@ namespace engine{
         public:
             virtual ~Component()=default;
 
+            virtual void update();
+
         protected:
             Component(Entity &entity);
         };

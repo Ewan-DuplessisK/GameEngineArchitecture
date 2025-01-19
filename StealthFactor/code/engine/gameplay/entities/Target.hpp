@@ -1,19 +1,19 @@
 #pragma once
 
-#include <ode/collision.h>
-#include <engine/graphics/ShapeList.hpp>
+
 #include <engine/gameplay/Entity.hpp>
 
 namespace engine
 {
 	namespace gameplay
 	{
+		class CollisionComponent;
 		namespace entities
 		{
 			class Target : public Entity
 			{
 			public:
-				Target();
+				Target(ManagerContext& pContext);
 				~Target();
 
 				virtual void update() override;
@@ -21,8 +21,7 @@ namespace engine
 				virtual void draw() override;
 
 			private:
-				graphics::ShapeList shapeList;
-				dGeomID collisionGeomId;
+				CollisionComponent* collision_component_ = nullptr;
 			};
 		}
 	}
