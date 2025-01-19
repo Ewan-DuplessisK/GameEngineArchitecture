@@ -4,6 +4,11 @@ namespace engine
 {
 	namespace gameplay
 	{
+		Entity::~Entity(){}
+
+		void Entity::update(){
+		}
+
 		const sf::Vector2f & Entity::getPosition() const
 		{
 			return _position;

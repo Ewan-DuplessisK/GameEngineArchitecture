@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <pugixml/pugixml.hpp>
-//#include <engine/gameplay/GameplayManager.hpp>
+#include <engine/gameplay/GameplayManager.hpp>
 #include <engine/gameplay/entities/Player.hpp>
 
 #include "engine/gameplay/components/CollisionComponent.h"
@@ -14,9 +14,9 @@ namespace engine
 	{
 		namespace entities
 		{
-			Enemy::Enemy(Entity& entity,const std::string &archetypeName):Character(entity)
+			Enemy::Enemy(ManagerContext& pContext,const std::string &archetypeName):Character(pContext)
 			{
-				collision_component_ = new CollisionComponent(entity,"",0.9f, 0.9f, 1.f);
+				collision_component_ = new CollisionComponent(*this,"",0.9f, 0.9f, 1.f);
 				loadArchetype(archetypeName);
 			}
 
@@ -24,7 +24,7 @@ namespace engine
 			{
 				Character::update();
 				
-				auto &player = gameplay::Manager::getInstance().getPlayer();
+				auto &player = getContext().gameplayManager.getPlayer();
 				if (player.hasJustMoved())
 				{
 					auto &playerPosition = player.getPosition();
@@ -41,7 +41,7 @@ namespace engine
 						}
 						else
 						{
-							gameplay::Manager::getInstance().gameOver();
+							getContext().gameplayManager.gameOver();
 						}
 					}
 					else

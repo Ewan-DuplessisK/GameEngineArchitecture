@@ -8,7 +8,7 @@ namespace engine{
     namespace gameplay{
 
         CollisionComponent::CollisionComponent(Entity& entity, std::string pShapeName, float collisionX,float collisionY,float collisionZ):Component(entity),shapeListName(pShapeName){
-            if(shapeListName!="")shapeList.load(shapeListName);
+            if(!shapeListName.empty())shapeList.load(shapeListName);
 
             collisionGeomId = dCreateBox(entity.getContext().physicsManager.getSpaceId(), collisionX,collisionY,collisionZ);
             dGeomSetData(collisionGeomId, this);

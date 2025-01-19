@@ -11,8 +11,8 @@ namespace engine
 			class Player : public Character
 			{
 			public:
-				Player(Entity& entity);
-				Player(Entity& entity,float pCellSize);
+				Player(ManagerContext& pContext);
+				Player(ManagerContext& pContext,float pCellSize);
 
 				virtual void update() override;
 

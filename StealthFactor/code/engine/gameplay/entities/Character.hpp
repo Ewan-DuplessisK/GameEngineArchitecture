@@ -9,12 +9,13 @@ namespace engine
 	namespace gameplay
 	{
 		class CollisionComponent;
+		class drawComponent;
 		namespace entities
 		{
 			class Character : public Entity
 			{
 			public:
-				Character(Entity& entity);
+				Character(ManagerContext& pContext);
 				virtual ~Character();
 
 				virtual void update() override;
@@ -23,6 +24,7 @@ namespace engine
 
 			protected:
 				CollisionComponent* collision_component_ = nullptr;
+				drawComponent* draw_Component_ = nullptr;
 
 				bool isWalking{ false };
 			};

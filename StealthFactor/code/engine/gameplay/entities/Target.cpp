@@ -1,9 +1,11 @@
 #include "Target.hpp"
 
-//#include <engine/gameplay/GameplayManager.hpp>
+#include <engine/gameplay/GameplayManager.hpp>
 
 #include "engine/gameplay/ManagerContext.h"
 #include "engine/gameplay/components/CollisionComponent.h"
+#include "engine/gameplay/components/drawComponent.h"
+#include "engine/graphics/GraphicsManager.hpp"
 
 namespace engine
 {
@@ -12,12 +14,12 @@ namespace engine
 		namespace entities
 		{
 			Target::Target(ManagerContext& pContext):Entity(pContext){
-				collision_component_ = new CollisionComponent(*this,"target",context.graphicsManager::CELL_SIZE * 0.9f, gameplay::Manager::CELL_SIZE * 0.9f, 1.f);
+				collision_component_ = new CollisionComponent(*this,"target",gameplay::Manager::CELL_SIZE * 0.9f, gameplay::Manager::CELL_SIZE * 0.9f, 1.f);
+				draw_component_ = new drawComponent(*this,"target");
 			}
 
 			Target::~Target()
 			{
-				collision_component_.~CollisionComponent();
 			}
 
 			void Target::update()
@@ -28,7 +30,7 @@ namespace engine
 
 			void Target::draw()
 			{
-				graphics::Manager::getInstance().draw(shapeList, getTransform());
+				draw_component_->draw(getTransform());
 			}
 		}
 	}

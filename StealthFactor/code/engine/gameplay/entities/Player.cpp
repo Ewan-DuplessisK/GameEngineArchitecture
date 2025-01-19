@@ -10,6 +10,7 @@
 #include <engine/Engine.hpp>
 
 #include "engine/gameplay/components/CollisionComponent.h"
+#include "engine/gameplay/components/drawComponent.h"
 
 namespace engine
 {
@@ -17,13 +18,15 @@ namespace engine
 	{
 		namespace entities
 		{
-			Player::Player(Entity& entity):Character(entity)
+			Player::Player(ManagerContext& pContext):Character(pContext)
 			{
-				collision_component_ = new CollisionComponent(entity,"player",CellSize * 0.9f, CellSize * 0.9f, 1.f);
+				collision_component_ = new CollisionComponent(*this,"player",CellSize * 0.9f, CellSize * 0.9f, 1.f);
+				draw_Component_ = new drawComponent(*this,"player");
 			}
 
-			Player::Player(Entity& entity,float pCellSize):CellSize(pCellSize),Character(entity){
-				collision_component_ = new CollisionComponent(entity,"player",CellSize * 0.9f, CellSize * 0.9f, 1.f);
+			Player::Player(ManagerContext& pContext,float pCellSize):CellSize(pCellSize),Character(pContext){
+				collision_component_ = new CollisionComponent(*this,"player",CellSize * 0.9f, CellSize * 0.9f, 1.f);
+				draw_Component_ = new drawComponent(*this,"player");
 			}
 
 			void Player::update()
@@ -75,7 +78,7 @@ namespace engine
 					auto targetEntity = dynamic_cast<entities::Target *>(entity);
 					if (targetEntity)
 					{
-						gameplay::Manager::getInstance().loadNextMap();
+						getContext().gameplayManager.loadNextMap();
 					}
 				}
 			}

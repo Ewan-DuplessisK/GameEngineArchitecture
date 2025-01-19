@@ -10,10 +10,11 @@ namespace engine{
         public:
             virtual ~Component()=default;
 
-            virtual void update();
+            virtual void update()=0;
 
         protected:
             Component(Entity &entity);
+            Entity* entity = nullptr;
         };
     }
     

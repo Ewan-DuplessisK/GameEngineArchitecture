@@ -16,10 +16,10 @@ namespace engine
 		public:
 			Entity(ManagerContext& pContext);
 			
-			virtual ~Entity() = default;
+			virtual ~Entity();
 
-			virtual void update() = 0;
-			virtual void draw() = 0;
+			virtual void update();
+			virtual void draw();
 
 			const sf::Vector2f &getPosition() const;
 			void setPosition(const sf::Vector2f &newPosition);

@@ -16,12 +16,11 @@ namespace engine
 	namespace gameplay
 	{
 		const float Manager::CELL_SIZE = 50.f;
-		Manager::Manager(graphics::Manager &graphicsManager, input::Manager &inputManager, physics::Manager &physicsManager):context{graphicsManager,inputManager,physicsManager}{}
+		Manager::Manager(graphics::Manager &graphicsManager, input::Manager &inputManager, physics::Manager &physicsManager):context{graphicsManager,inputManager,physicsManager,*this}{}
 
 		void Manager::update()
 		{
-			for (auto entity : entities)
-			{
+			for (auto entity : entities){
 				entity->update();
 			}
 
@@ -54,11 +53,8 @@ namespace engine
 
 		void Manager::loadMap(const std::string & mapName)
 		{
-			for (auto entity : entities)
-			{
-				delete entity;
-			}
 			entities.clear();
+			playerEntity = nullptr;
 
 			std::stringstream filename;
 			filename << "maps/" << mapName << ".xml";
@@ -89,7 +85,7 @@ namespace engine
 
 						std::string archetypeName = xmlElement.child_value("archetype");
 
-						auto entity = new entities::Enemy{ archetypeName };
+						auto entity = new entities::Enemy{context, archetypeName };
 						entity->setPosition(sf::Vector2f{ (column + 0.5f) * CELL_SIZE, (row + 0.5f) * CELL_SIZE });
 
 						entities.insert(std::unique_ptr<Entity>(entity));
@@ -103,7 +99,7 @@ namespace engine
 						int column = std::stoi(xmlElement.child_value("column"));
 						assert(column >= 0 && column < columns);
 
-						auto entity = new entities::Player(CELL_SIZE);
+						auto entity = new entities::Player(context,CELL_SIZE);
 						entity->setPosition(sf::Vector2f{ (column + 0.5f) * CELL_SIZE, (row + 0.5f) * CELL_SIZE });
 
 						entities.insert(std::unique_ptr<Entity>(entity));
@@ -118,7 +114,7 @@ namespace engine
 						int column = std::stoi(xmlElement.child_value("column"));
 						assert(column >= 0 && column < columns);
 
-						auto entity = new entities::Target{};
+						auto entity = new entities::Target{context};
 						entity->setPosition(sf::Vector2f{ (column + 0.5f) * CELL_SIZE, (row + 0.5f) * CELL_SIZE });
 
 						entities.insert(std::unique_ptr<Entity>(entity));

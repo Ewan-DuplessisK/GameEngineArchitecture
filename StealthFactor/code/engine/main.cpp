@@ -40,9 +40,9 @@ int main(int argc, const char **argv)
 		return EXIT_FAILURE;
 	}
 #endif
-
-	engine::Engine::getInstance().loadConfiguration();
-	engine::Engine::getInstance().run();
+	engine::Engine* engine = new engine::Engine();
+	engine->loadConfiguration();
+	engine->run();
 
 	return EXIT_SUCCESS;
 }

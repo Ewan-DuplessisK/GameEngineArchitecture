@@ -12,7 +12,7 @@ namespace engine
 			class Enemy : public Character
 			{
 			public:
-				Enemy(Entity& entity,const std::string &archetypeName);
+				Enemy(ManagerContext& pContext,const std::string &archetypeName);
 
 				virtual void update() override;
 

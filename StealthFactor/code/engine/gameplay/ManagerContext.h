@@ -16,14 +16,16 @@ namespace engine
     {
         class Manager;
     }
-
+    
     namespace gameplay
     {
+        class Manager;
         struct ManagerContext
         {
             graphics::Manager &graphicsManager;
             input::Manager &inputManager;
             physics::Manager &physicsManager;
+            Manager &gameplayManager;
         };
     }
 }

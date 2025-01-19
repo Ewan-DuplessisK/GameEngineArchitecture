@@ -4,6 +4,7 @@
 #include <engine/physics/PhysicsManager.hpp>
 
 #include "engine/gameplay/components/CollisionComponent.h"
+#include "engine/gameplay/components/drawComponent.h"
 
 namespace engine
 {
@@ -11,14 +12,13 @@ namespace engine
 	{
 		namespace entities
 		{
-			Character::Character(Entity& entity):Entity(entity)
+			Character::Character(ManagerContext& pContext):Entity(pContext)
 			{
 				//collision_component_ = new CollisionComponent(entity,"",0.f,0.f,0.f);
 			}
 
 			Character::~Character()
 			{
-				collision_component_.~CollisionComponent();
 			}
 
 			void Character::update(){
@@ -28,7 +28,7 @@ namespace engine
 
 			void Character::draw()
 			{
-				graphics::Manager::getInstance().draw(shapeList, getTransform());
+				draw_Component_->draw(getTransform());
 			}
 		}
 	}

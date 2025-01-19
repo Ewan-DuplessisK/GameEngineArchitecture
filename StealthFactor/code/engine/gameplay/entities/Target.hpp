@@ -8,6 +8,7 @@ namespace engine
 	namespace gameplay
 	{
 		class CollisionComponent;
+		class drawComponent;
 		namespace entities
 		{
 			class Target : public Entity
@@ -22,6 +23,7 @@ namespace engine
 
 			private:
 				CollisionComponent* collision_component_ = nullptr;
+				drawComponent* draw_component_ = nullptr;
 			};
 		}
 	}
